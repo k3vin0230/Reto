@@ -58,7 +58,20 @@ router.put('/update/products/:id',verifyTokenAndAdmin, async (req, res) => {
       products.push(response.data);
       res.status(201).json(response.data);
   } catch (error) {
-      res.status(500).json({ message: 'Error al crear un nuevo producto en DummyJSON' });
+      res.status(500).json({ message: 'Error al editar el producto en DummyJSON' });
+  }
+});
+
+// Ruta para ELIMINAR un producto (solo para administradores)
+router.delete('/delete/products/:id',verifyTokenAndAdmin, async (req, res) => {
+  const { id } = req.params;
+  try {
+  
+      const response = await axios.delete(`${DUMMYJSON_API}/${id}`);
+      products.push(response.data);
+      res.status(201).json(response.data);
+  } catch (error) {
+      res.status(500).json({ message: 'Error al eliminar el producto en DummyJSON' });
   }
 });
 
