@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 const axios = require('axios');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = 'cl4v3'; 
 
 // URL de la API de DummyJSON para los productos
 const DUMMYJSON_API = 'https://dummyjson.com/products';
@@ -32,16 +34,16 @@ router.get('/products', async (req, res) => {
 });
 
 // Ruta para crear un nuevo producto (solo para administradores)
-router.post('/products', ValidarTokenyAdmin, async (req, res) => {
+router.post('/products',verifyTokenAndAdmin, async (req, res) => {
   const { title, price } = req.body;
   try {
       // Crear un nuevo producto en DummyJSON
       const newProduct = { title, price };
-      const response = await axios.post(DUMMYJSON_API, newProduct);
+      const response = await axios.post(DUMMYJSON_API+'/add', newProduct);
       products.push(response.data);
       res.status(201).json(response.data);
   } catch (error) {
-      res.status(500).json({ message: 'Error al crear un nuevo producto en DummyJSON' });
+      res.status(501).json({ message: 'Error al crear un nuevo producto en DummyJSON' });
   }
 });
 
@@ -50,19 +52,15 @@ router.post('/products', ValidarTokenyAdmin, async (req, res) => {
 
 
 
-
-
-
-
-
 // Middleware para verificar el token JWT y el rol de administrador
-const JWT_SECRET = 'cl4v3';
-function ValidarTokenyAdmin(req, res, next) {
-  const token = req.headers.authorization;
+function verifyTokenAndAdmin(req, res, next) {
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
+  if (!authHeader) {
       return res.status(401).json({ message: 'Token no proporcionado' });
   }
+
+  const token = authHeader.split(' ')[1];  // Asumiendo el formato 'Bearer <token>'
 
   jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if (err) {
