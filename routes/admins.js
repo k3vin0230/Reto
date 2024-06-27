@@ -43,10 +43,24 @@ router.post('/products',verifyTokenAndAdmin, async (req, res) => {
       products.push(response.data);
       res.status(201).json(response.data);
   } catch (error) {
-      res.status(501).json({ message: 'Error al crear un nuevo producto en DummyJSON' });
+      res.status(500).json({ message: 'Error al crear un nuevo producto en DummyJSON' });
   }
 });
 
+// Ruta para EDITA un producto (solo para administradores)
+router.put('/update/products/:id',verifyTokenAndAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { title, price } = req.body;
+  try {
+  
+      const updateProduct = { title, price };
+      const response = await axios.put(`${DUMMYJSON_API}/${id}`, updateProduct);
+      products.push(response.data);
+      res.status(201).json(response.data);
+  } catch (error) {
+      res.status(500).json({ message: 'Error al crear un nuevo producto en DummyJSON' });
+  }
+});
 
 
 
