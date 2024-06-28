@@ -12,7 +12,7 @@ const users = [
   { id: 2, username: 'admin', password: 'admin123', role: 'admin' }
 ];
 
-/* GET users listing. */
+
 router.post('/auth/login', function(req, res) {
   const { username, password } = req.body;
 

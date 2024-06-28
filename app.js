@@ -24,14 +24,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-//Urls
-app.use('/', adminsRouter);
-app.use('/users', usersRouter);
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
 
 //Cors para las peticiones y los puertos admitidos
 app.use(cors({
@@ -40,6 +32,18 @@ app.use(cors({
   "preflightContinue": false,
   "optionsSuccessStatus": 204
 }));
+
+
+
+
+//Urls
+app.use('/', adminsRouter);
+app.use('/users', usersRouter);
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
 
 
 // error handler
