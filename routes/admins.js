@@ -48,7 +48,7 @@ router.post('/products',verifyTokenAndAdmin, async (req, res) => {
 });
 
 // Ruta para EDITA un producto (solo para administradores)
-router.put('/update/products/:id',verifyTokenAndAdmin, async (req, res) => {
+router.put('/products/update/:id',verifyTokenAndAdmin, async (req, res) => {
   const { id } = req.params;
   const { title, price } = req.body;
   try {
@@ -63,7 +63,7 @@ router.put('/update/products/:id',verifyTokenAndAdmin, async (req, res) => {
 });
 
 // Ruta para ELIMINAR un producto (solo para administradores)
-router.delete('/delete/products/:id',verifyTokenAndAdmin, async (req, res) => {
+router.delete('/products/delete/:id', async (req, res) => {
   const { id } = req.params;
   try {
   
